@@ -8,4 +8,4 @@ if [ ! -d redis-stable/src ]; then
     make
 fi
 
-./redis-stable/src/redis-server redis-stable/redis_config.conf &
+./redis-stable/src/redis-server &
