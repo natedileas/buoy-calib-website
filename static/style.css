@@ -1,0 +1,19 @@
+#header {
+  position:absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 10%;
+  color: orange;
+  background-color: gray;
+}
+.headertext {
+  margin-left: 10px;
+  color:orange; 
+  text-decoration: none;
+  /* font-size: 10vh; */
+}
+.progress {
+  width: 100%;
+  text-align: center;
+}

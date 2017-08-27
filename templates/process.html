@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% from "_formhelpers.html" import render_field %}
+
+<form method="POST">
+  <p>
+    {{ render_field(form.scene_id) }} <br>
+    {{ render_field(form.ee_user) }} <br>
+    {{ render_field(form.ee_pass) }} <br>
+    {{ render_field(form.atmo_source) }} <br>
+  </p>
+  <br>
+
+  <input type="submit" name="SUMBITT">
+  {{ form.hidden_tag() }} <!-- this is required for the form validation to work -->
+  
+</form>
+
+{% endblock %}

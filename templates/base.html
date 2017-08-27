@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RIT Landsat Processing</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div id="header">
+      <h1>
+        <a class="headertext" href="http://127.0.0.1:5000/index">Home</a> | 
+        <a class="headertext" href="http://127.0.0.1:5000/process">Process</a> | 
+        <a class="headertext" href="http://127.0.0.1:5000/jobs">Jobs</a> | 
+        <a class="headertext" href="http://cis.rit.edu">CIS</a> | 
+        <a class="headertext" href="http://rit.edu">RIT</a>
+      </h1>
+    </div>
+    <br>
+    <br>
+    <br>
+    {% block content %}{% endblock %}
+  </body>
+</html>
