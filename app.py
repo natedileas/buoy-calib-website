@@ -2,6 +2,7 @@ import os
 import time
 from flask import Flask, request, render_template, session, flash, redirect, \
     url_for, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from celery import Celery
 
 from form import ProcessForm
@@ -24,6 +25,29 @@ celery.conf.update(app.config)
 # flask WTF config, stands for cross-site request forgery prevention
 app.config['CSRF_ENABLED'] = True
 
+# database stuff
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+db = SQLAlchemy(app)
+
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.String(120), unique=True)
+    email = db.Column(db.String(120))
+    scene_id = db.Column(db.String(120))
+    buoy_id = db.Column(db.String(120))
+    atmo_source = db.Column(db.String(12))
+
+    def __init__(self, email, task_id, scene_id, buoy_id, atmo_source):
+        self.email = email
+        self.task_id = task_id
+        self.scene_id = scene_id
+        self.buoy_id = buoy_id
+        self.atmo_source = atmo_source
+
+    def __repr__(self):
+        return '<Scene ID: {0} Buoy ID: {1}>'.format(self.scene_id, self.buoy_id)
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -38,15 +62,19 @@ def index():
 def process():
 
     form = ProcessForm(request.form)
-    print form
-    print request.form
     if request.method == 'POST' and form.validate():
-        # process the form data and redirect to the progress / jobs page
-        # TODO spawn a job from this
-        task = download.apply_async((str(form.scene_id.data), ))
-        return redirect(url_for('jobs'))
-    else:
-        return render_template('process.html', form=form)
+        # process the form data
+        scene_id = str(form.scene_id.data)
+        print scene_id
+        task = download.apply_async((scene_id, ))
+        # create entry in the database
+        new_task = Task('ndileas@gmail.com', str(task.id), scene_id, scene_id, 'narr')
+        db.session.add(new_task)
+        db.session.commit()
+
+        return redirect(url_for('jobs'))   # redirect to the jobs page
+
+    return render_template('process.html', form=form)
 
 
 @app.route('/jobs', methods=['GET'])
@@ -56,10 +84,10 @@ def jobs():
 
 @app.route('/enum_tasks', methods=['GET'])
 def enum_tasks():
-    i = celery.control.inspect()
-    active_tasks = i.active()
-    reserved_tasks = i.reserved()
-    return jsonify(active=active_tasks, reserved=reserved_tasks)
+    tasks = Task.query.all()
+    task_list = [{'task_id': str(t.task_id)} for t in tasks]
+
+    return jsonify(tasks=task_list)
 
 
 @app.route('/status/<task_id>')

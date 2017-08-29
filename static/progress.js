@@ -7,16 +7,14 @@ function enumerate_tasks() {
     $.getJSON('/enum_tasks', {},
         function(data) {
             // enumerate active tasks
-            active = data.active;
-            console.log(active);
+            tasks = data.tasks;
+            console.log(tasks);
 
-            for (worker in active) {
-                for (i = 0; i < active[worker].length; i++) {
-                    // generate url, build progressbars
-                    var status_url = '/status/' + active[worker][i]['id'];
-                    console.log(status_url);
-                    create_progress_bar(status_url);
-                }
+            for (i=0; i < tasks.length; i++) {
+                // generate url, build progressbars
+                var status_url = '/status/' + tasks[i]['task_id'];
+                console.log(status_url);
+                create_progress_bar(status_url);
             }
         }
     );
