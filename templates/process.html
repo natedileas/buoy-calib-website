@@ -17,4 +17,39 @@
   
 </form>
 
+<div id="img_home">
+	<img src="http://dcokc.org/wp-content/uploads/2015/02/White-Plain-Background-300x300.jpg" width="300" height="300" id="thumbnail">
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript">
+	$('#scene_id').on('input', function() { 
+    var id = $(this).val(); // get the current value of the input field.
+    console.log(id);
+
+    if (id.length == 21){ // it's a pre-collection id
+    	//var thumbnail_url = 'https://earthexplorer.usgs.gov/browse/landsat_8/2017/049/243/LC08_L1GT_049243_20170905_20170905_01_RT.jpg'
+    }
+	else if (id.length == 40) { // it's a collection 1 id
+		var path = id.substring(10, 13);
+		var row = id.substring(13, 16);
+		var year = id.substring(17, 21);
+		var thumbnail_url = 'https://earthexplorer.usgs.gov/browse/landsat_8/' + year + '/' + path + '/' + row + '/' + id + '.jpg'
+	} 
+
+	console.log(thumbnail_url);
+
+  	var img = document.getElementById("thumbnail");
+  	img.onload = function() {
+	    // img exists and is loaded
+	}
+	img.onerror = function() {
+	    // img did not load
+	    img.src = "http://dcokc.org/wp-content/uploads/2015/02/White-Plain-Background-300x300.jpg"
+	}
+
+    img.src = thumbnail_url;
+});
+</script>
+
 {% endblock %}
