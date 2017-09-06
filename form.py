@@ -4,9 +4,8 @@ from wtforms.validators import DataRequired
 
 
 class ProcessForm(FlaskForm):
-    scene_id = StringField('Scene ID: ', validators=[DataRequired()])
-
-    ee_user = StringField('USGS Username: ', validators=[DataRequired()])
-    ee_pass = PasswordField('USGS Password: ', validators=[DataRequired()])
+    scene_id = StringField('Scene ID: ', validators=[DataRequired()], id='scene_id')
 
     atmo_source = SelectMultipleField('Atmosphere Data Source: ', choices=[('narr', 'NARR'), ('merra', 'MERRA')])
+
+    buoy_id = SelectMultipleField('Buoy IDs: ', choices=[])

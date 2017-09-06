@@ -77,6 +77,14 @@ def process():
     return render_template('process.html', form=form)
 
 
+@app.route('/buoy_ids', methods=['POST'])
+def buoy_ids():
+    print request.data
+
+    _ids = [('buoy1', '45012'), ('buoy2', '45002')]
+    return jsonify(ids=_ids)
+
+
 @app.route('/jobs', methods=['GET'])
 def jobs():
     return render_template('jobs.html')
@@ -85,7 +93,7 @@ def jobs():
 @app.route('/enum_tasks', methods=['GET'])
 def enum_tasks():
     tasks = Task.query.all()
-    task_list = [{'task_id': str(t.task_id)} for t in tasks]
+    task_list = [{'task_id': str(t.task_id), 'scene_id': str(t.scene_id)} for t in tasks]
 
     return jsonify(tasks=task_list)
 
